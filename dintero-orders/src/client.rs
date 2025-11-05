@@ -115,12 +115,12 @@ pub trait OrdersOperations: Send + Sync {
 #[async_trait]
 pub trait OrdersAdapter: Send + Sync {
     async fn get_json<T: serde::de::DeserializeOwned>(&self, path: &str) -> Result<T>;
-    async fn post_json<T: serde::de::DeserializeOwned, B: serde::Serialize + Send>(
+    async fn post_json<T: serde::de::DeserializeOwned, B: serde::Serialize + Send + Sync>(
         &self,
         path: &str,
         body: &B,
     ) -> Result<T>;
-    async fn put_json<T: serde::de::DeserializeOwned, B: serde::Serialize + Send>(
+    async fn put_json<T: serde::de::DeserializeOwned, B: serde::Serialize + Send + Sync>(
         &self,
         path: &str,
         body: &B,

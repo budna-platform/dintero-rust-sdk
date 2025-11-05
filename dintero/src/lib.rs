@@ -10,6 +10,11 @@ pub mod checkout {
     pub use dintero_checkout::*;
 }
 
+#[cfg(feature = "orders")]
+pub mod orders {
+    pub use dintero_orders::*;
+}
+
 pub use client::HttpClient;
 pub use config::{AuthConfig, Config, ConfigBuilder, Environment, RetryConfig};
 pub use error::{Error, Result};
@@ -62,6 +67,12 @@ impl DinteroClient {
         let adapter = adapters::CheckoutHttpAdapter::new(Arc::clone(&self.http));
         let account_id = self.http.account_id();
         checkout::CheckoutClient::new(adapter, account_id)
+    }
+
+    #[cfg(feature = "orders")]
+    pub fn orders(&self) -> orders::OrdersClient<HttpClient> {
+        let account_id = self.http.account_id().to_string();
+        orders::OrdersClient::new((*self.http).clone(), account_id)
     }
 }
 

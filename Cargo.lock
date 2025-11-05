@@ -147,6 +147,7 @@ dependencies = [
  "bytes",
  "chrono",
  "dintero-checkout",
+ "dintero-orders",
  "reqwest",
  "serde",
  "serde_json",

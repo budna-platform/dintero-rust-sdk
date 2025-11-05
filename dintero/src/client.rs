@@ -186,6 +186,34 @@ impl HttpClient {
         self.execute_with_retry(builder).await?;
         Ok(())
     }
+
+    pub async fn get_json<T: DeserializeOwned>(&self, path: &str) -> Result<T> {
+        let builder = self.get(path).await?;
+        self.send(builder).await
+    }
+
+    pub async fn post_json<T: DeserializeOwned, B: Serialize>(
+        &self,
+        path: &str,
+        body: &B,
+    ) -> Result<T> {
+        let builder = self.post(path).await?;
+        self.send_json(builder, body).await
+    }
+
+    pub async fn put_json<T: DeserializeOwned, B: Serialize>(
+        &self,
+        path: &str,
+        body: &B,
+    ) -> Result<T> {
+        let builder = self.put(path).await?;
+        self.send_json(builder, body).await
+    }
+
+    pub async fn delete_request(&self, path: &str) -> Result<()> {
+        let builder = self.delete(path).await?;
+        self.send_empty(builder).await
+    }
 }
 
 #[derive(serde::Deserialize)]
@@ -197,4 +225,19 @@ struct ApiError {
 struct ApiErrorDetail {
     code: String,
     message: String,
+}
+
+impl Clone for HttpClient {
+    fn clone(&self) -> Self {
+        Self {
+            client: self.client.clone(),
+            auth: Arc::clone(&self.auth),
+            base_url: self.base_url.clone(),
+            account_id: self.account_id.clone(),
+            max_retries: self.max_retries,
+            initial_backoff_ms: self.initial_backoff_ms,
+            max_backoff_ms: self.max_backoff_ms,
+            backoff_multiplier: self.backoff_multiplier,
+        }
+    }
 }
