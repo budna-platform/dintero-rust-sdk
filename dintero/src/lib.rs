@@ -9,6 +9,9 @@ pub mod checkout {
     pub use dintero_checkout::*;
 }
 
+#[cfg(feature = "checkout")]
+mod checkout_adapter;
+
 pub use client::HttpClient;
 pub use config::{AuthConfig, Config, ConfigBuilder, Environment, RetryConfig};
 pub use error::{Error, Result};
@@ -54,6 +57,13 @@ impl DinteroClient {
 
     pub fn http(&self) -> &Arc<HttpClient> {
         &self.http
+    }
+
+    #[cfg(feature = "checkout")]
+    pub fn checkout(&self) -> checkout::CheckoutClient<checkout_adapter::CheckoutHttpAdapter> {
+        let adapter = checkout_adapter::CheckoutHttpAdapter::new(Arc::clone(&self.http));
+        let account_id = self.http.account_id();
+        checkout::CheckoutClient::new(adapter, account_id)
     }
 }
 

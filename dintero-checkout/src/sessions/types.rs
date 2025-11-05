@@ -109,7 +109,7 @@ pub struct CreateSessionRequest {
     pub merchant_terms_url: Option<String>,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SessionUrl {
     pub return_url: Option<String>,
     pub callback_url: Option<String>,
