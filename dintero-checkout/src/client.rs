@@ -1,9 +1,12 @@
-use crate::card_tokens::CardToken;
+use crate::card_tokens::{CardToken, CardTokenListResponse, ListCardTokensParams};
 use crate::sessions::{
     CheckoutSession, CreateProfileRequest, CreateSessionRequest, CreateSessionRequestPayload,
     ListSessionsParams, SessionListResponse, SessionProfile,
 };
-use crate::transactions::{CaptureRequest, RefundRequest, Transaction, VoidRequest};
+use crate::transactions::{
+    CaptureRequest, ExtendAuthorizationRequest, ListTransactionsParams, RefundRequest, Transaction,
+    TransactionListResponse, UpdateTransactionRequest, VoidRequest,
+};
 use async_trait::async_trait;
 
 pub type Result<T> = std::result::Result<T, CheckoutError>;
@@ -46,11 +49,14 @@ pub trait CheckoutOperations: Send + Sync {
     async fn list_profiles(&self) -> Result<Vec<SessionProfile>>;
 
     async fn get_transaction(&self, transaction_id: &str) -> Result<Transaction>;
-    async fn list_transactions(&self) -> Result<Vec<Transaction>>;
+    async fn list_transactions(
+        &self,
+        params: ListTransactionsParams,
+    ) -> Result<TransactionListResponse>;
     async fn update_transaction(
         &self,
         transaction_id: &str,
-        metadata: serde_json::Value,
+        request: UpdateTransactionRequest,
     ) -> Result<Transaction>;
     async fn extend_authorization(&self, transaction_id: &str, days: u32) -> Result<Transaction>;
     async fn capture_transaction(
@@ -70,7 +76,8 @@ pub trait CheckoutOperations: Send + Sync {
     ) -> Result<Transaction>;
 
     async fn get_card_token(&self, token_id: &str) -> Result<CardToken>;
-    async fn list_card_tokens(&self) -> Result<Vec<CardToken>>;
+    async fn list_card_tokens(&self, params: ListCardTokensParams)
+        -> Result<CardTokenListResponse>;
     async fn delete_card_token(&self, token_id: &str) -> Result<()>;
 }
 
@@ -203,21 +210,41 @@ impl<C: HttpClient> CheckoutOperations for CheckoutClient<C> {
         self.client.get_json(&path).await
     }
 
-    async fn list_transactions(&self) -> Result<Vec<Transaction>> {
-        let path = format!("accounts/{}/transactions", self.account_id);
+    async fn list_transactions(
+        &self,
+        params: ListTransactionsParams,
+    ) -> Result<TransactionListResponse> {
+        let mut path = format!("accounts/{}/transactions", self.account_id);
+
+        let mut query_params = Vec::new();
+        if let Some(limit) = params.limit {
+            query_params.push(format!("limit={}", limit));
+        }
+        if let Some(token) = params.page_token {
+            query_params.push(format!("page_token={}", token));
+        }
+        if let Some(status) = params.status {
+            query_params.push(format!("status={:?}", status));
+        }
+
+        if !query_params.is_empty() {
+            path.push('?');
+            path.push_str(&query_params.join("&"));
+        }
+
         self.client.get_json(&path).await
     }
 
     async fn update_transaction(
         &self,
         transaction_id: &str,
-        metadata: serde_json::Value,
+        request: UpdateTransactionRequest,
     ) -> Result<Transaction> {
         let path = format!(
             "accounts/{}/transactions/{}",
             self.account_id, transaction_id
         );
-        self.client.put_json(&path, &metadata).await
+        self.client.put_json(&path, &request).await
     }
 
     async fn extend_authorization(&self, transaction_id: &str, days: u32) -> Result<Transaction> {
@@ -225,8 +252,8 @@ impl<C: HttpClient> CheckoutOperations for CheckoutClient<C> {
             "accounts/{}/transactions/{}/extend_authorization",
             self.account_id, transaction_id
         );
-        let body = serde_json::json!({ "days": days });
-        self.client.post_json(&path, &body).await
+        let request = ExtendAuthorizationRequest::new(days);
+        self.client.post_json(&path, &request).await
     }
 
     async fn capture_transaction(
@@ -270,8 +297,28 @@ impl<C: HttpClient> CheckoutOperations for CheckoutClient<C> {
         self.client.get_json(&path).await
     }
 
-    async fn list_card_tokens(&self) -> Result<Vec<CardToken>> {
-        let path = format!("accounts/{}/card-tokens", self.account_id);
+    async fn list_card_tokens(
+        &self,
+        params: ListCardTokensParams,
+    ) -> Result<CardTokenListResponse> {
+        let mut path = format!("accounts/{}/card-tokens", self.account_id);
+
+        let mut query_params = Vec::new();
+        if let Some(limit) = params.limit {
+            query_params.push(format!("limit={}", limit));
+        }
+        if let Some(token) = params.page_token {
+            query_params.push(format!("page_token={}", token));
+        }
+        if let Some(status) = params.status {
+            query_params.push(format!("status={:?}", status));
+        }
+
+        if !query_params.is_empty() {
+            path.push('?');
+            path.push_str(&query_params.join("&"));
+        }
+
         self.client.get_json(&path).await
     }
 
