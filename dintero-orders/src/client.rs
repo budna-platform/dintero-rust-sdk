@@ -6,6 +6,7 @@ use crate::drafts::*;
 use crate::events::*;
 use crate::orders::*;
 use crate::refunds::*;
+use crate::sessions::*;
 use async_trait::async_trait;
 
 pub type Result<T> = std::result::Result<T, OrdersError>;
@@ -95,6 +96,20 @@ pub trait OrdersOperations: Send + Sync {
     async fn get_events(&self, order_id: &str) -> Result<EventListResponse>;
     async fn create_event(&self, order_id: &str, request: CreateEventRequest)
         -> Result<OrderEvent>;
+
+    async fn create_order_session(
+        &self,
+        order_id: &str,
+        request: CreateOrderSessionRequest,
+    ) -> Result<OrderSession>;
+    async fn get_order_session(&self, order_id: &str, session_id: &str) -> Result<OrderSession>;
+    async fn list_order_sessions(&self, order_id: &str) -> Result<OrderSessionListResponse>;
+
+    async fn list_customer_orders(&self, customer_id: &str) -> Result<OrderListResponse>;
+    async fn get_customer_order(&self, customer_id: &str, order_id: &str) -> Result<Order>;
+
+    async fn list_store_orders(&self, store_id: &str) -> Result<OrderListResponse>;
+    async fn get_store_order(&self, store_id: &str, order_id: &str) -> Result<Order>;
 }
 
 #[async_trait]
@@ -373,5 +388,56 @@ impl<A: OrdersAdapter> OrdersOperations for OrdersClient<A> {
     ) -> Result<OrderEvent> {
         let path = format!("accounts/{}/orders/{}/events", self.account_id, order_id);
         self.adapter.post_json(&path, &request).await
+    }
+
+    async fn create_order_session(
+        &self,
+        order_id: &str,
+        request: CreateOrderSessionRequest,
+    ) -> Result<OrderSession> {
+        let path = format!("accounts/{}/orders/{}/session", self.account_id, order_id);
+        self.adapter.post_json(&path, &request).await
+    }
+
+    async fn get_order_session(&self, order_id: &str, session_id: &str) -> Result<OrderSession> {
+        let path = format!(
+            "accounts/{}/orders/{}/sessions/{}",
+            self.account_id, order_id, session_id
+        );
+        self.adapter.get_json(&path).await
+    }
+
+    async fn list_order_sessions(&self, order_id: &str) -> Result<OrderSessionListResponse> {
+        let path = format!("accounts/{}/orders/{}/sessions", self.account_id, order_id);
+        self.adapter.get_json(&path).await
+    }
+
+    async fn list_customer_orders(&self, customer_id: &str) -> Result<OrderListResponse> {
+        let path = format!(
+            "accounts/{}/customers/{}/orders",
+            self.account_id, customer_id
+        );
+        self.adapter.get_json(&path).await
+    }
+
+    async fn get_customer_order(&self, customer_id: &str, order_id: &str) -> Result<Order> {
+        let path = format!(
+            "accounts/{}/customers/{}/orders/{}",
+            self.account_id, customer_id, order_id
+        );
+        self.adapter.get_json(&path).await
+    }
+
+    async fn list_store_orders(&self, store_id: &str) -> Result<OrderListResponse> {
+        let path = format!("accounts/{}/stores/{}/orders", self.account_id, store_id);
+        self.adapter.get_json(&path).await
+    }
+
+    async fn get_store_order(&self, store_id: &str, order_id: &str) -> Result<Order> {
+        let path = format!(
+            "accounts/{}/stores/{}/orders/{}",
+            self.account_id, store_id, order_id
+        );
+        self.adapter.get_json(&path).await
     }
 }
