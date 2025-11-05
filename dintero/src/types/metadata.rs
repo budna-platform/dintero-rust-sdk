@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

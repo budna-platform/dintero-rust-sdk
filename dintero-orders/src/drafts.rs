@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::orders::{Address, Customer};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
@@ -101,11 +103,7 @@ impl CreateDraftOrderRequestBuilder {
             amount: self.amount.ok_or("amount is required")?,
             currency: self.currency.ok_or("currency is required")?,
             merchant_reference: self.merchant_reference,
-            items: if self.items.is_empty() {
-                None
-            } else {
-                Some(self.items)
-            },
+            items: if self.items.is_empty() { None } else { Some(self.items) },
             customer: self.customer,
         })
     }

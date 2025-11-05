@@ -1,3 +1,5 @@
+//! Credit check operations.
+
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -5,7 +7,7 @@ use std::collections::HashMap;
 pub struct CreditCheckRequest {
     pub customer: CreditCheckCustomer,
     pub order: CreditCheckOrder,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, serde_json::Value>>,
 }
@@ -14,13 +16,13 @@ pub struct CreditCheckRequest {
 pub struct CreditCheckCustomer {
     pub email: String,
     pub phone_number: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_name: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<CreditCheckAddress>,
 }
@@ -28,16 +30,16 @@ pub struct CreditCheckCustomer {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreditCheckAddress {
     pub country: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_line: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_line_2: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub postal_code: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub postal_place: Option<String>,
 }
@@ -46,7 +48,7 @@ pub struct CreditCheckAddress {
 pub struct CreditCheckOrder {
     pub amount: i64,
     pub currency: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<CreditCheckItem>>,
 }
@@ -65,10 +67,10 @@ pub struct CreditCheckResponse {
     pub approved: bool,
     pub credit_limit: Option<i64>,
     pub provider: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reference: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
 }

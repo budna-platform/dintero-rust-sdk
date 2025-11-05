@@ -1,3 +1,5 @@
+//! Checkout API adapter.
+
 use crate::client::HttpClient as DinteroHttpClient;
 use async_trait::async_trait;
 use serde::{de::DeserializeOwned, Serialize};

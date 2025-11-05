@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::error::Result;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -71,8 +73,7 @@ pub struct ResetPasswordRequest {
 
 impl crate::client::AccountsClient {
     pub async fn list_users(&self) -> Result<Vec<User>> {
-        self.execute_request(Method::GET, "accounts/current/users", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "accounts/current/users", None::<&()>).await
     }
 
     pub async fn get_user(&self, user_id: &str) -> Result<User> {
@@ -85,8 +86,7 @@ impl crate::client::AccountsClient {
     }
 
     pub async fn create_user(&self, request: &CreateUserRequest) -> Result<User> {
-        self.execute_request(Method::POST, "accounts/current/users", Some(request))
-            .await
+        self.execute_request(Method::POST, "accounts/current/users", Some(request)).await
     }
 
     pub async fn update_user(&self, user_id: &str, request: &UpdateUserRequest) -> Result<User> {
@@ -117,22 +117,18 @@ impl crate::client::AccountsClient {
     }
 
     pub async fn list_permissions(&self) -> Result<Vec<Permission>> {
-        self.execute_request(Method::GET, "accounts/current/permissions", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "accounts/current/permissions", None::<&()>).await
     }
 
     pub async fn list_roles(&self) -> Result<Vec<Role>> {
-        self.execute_request(Method::GET, "accounts/current/roles", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "accounts/current/roles", None::<&()>).await
     }
 
     pub async fn update_password(&self, request: &UpdatePasswordRequest) -> Result<()> {
-        self.execute_request(Method::POST, "accounts/current/password", Some(request))
-            .await
+        self.execute_request(Method::POST, "accounts/current/password", Some(request)).await
     }
 
     pub async fn reset_password(&self, request: &ResetPasswordRequest) -> Result<()> {
-        self.execute_request(Method::POST, "accounts/password/reset", Some(request))
-            .await
+        self.execute_request(Method::POST, "accounts/password/reset", Some(request)).await
     }
 }

@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::types::*;
 
 pub struct ReportConfigsClient {
@@ -14,13 +16,7 @@ impl ReportConfigsClient {
             self.client.base_url, self.client.account_id
         );
 
-        let response = self
-            .client
-            .http_client
-            .post(&url)
-            .json(&request)
-            .send()
-            .await?;
+        let response = self.client.http_client.post(&url).json(&request).send().await?;
 
         let config = response.json().await?;
         Ok(config)
@@ -61,13 +57,7 @@ impl ReportConfigsClient {
             self.client.base_url, self.client.account_id, config_id
         );
 
-        let response = self
-            .client
-            .http_client
-            .put(&url)
-            .json(&request)
-            .send()
-            .await?;
+        let response = self.client.http_client.put(&url).json(&request).send().await?;
 
         let config = response.json().await?;
         Ok(config)

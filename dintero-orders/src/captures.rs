@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -34,10 +36,7 @@ pub struct CreateCaptureRequest {
 
 impl CreateCaptureRequest {
     pub fn new(amount: i64) -> Self {
-        Self {
-            amount,
-            items: None,
-        }
+        Self { amount, items: None }
     }
 
     pub fn with_items(mut self, items: Vec<CaptureItem>) -> Self {

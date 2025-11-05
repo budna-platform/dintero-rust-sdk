@@ -55,7 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
 
         let account_id = "T12345678";
-        
+
         println!("\n3. Getting specific account...");
         match accounts.get_account(account_id).await {
             Ok(account) => {
@@ -103,7 +103,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
 
         let profile_id = "P12345678";
-        
+
         println!("\n6. Getting specific profile...");
         match accounts.get_profile(account_id, profile_id).await {
             Ok(profile) => {
@@ -130,10 +130,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .name("Updated Profile")
             .logo_url("https://example.com/new-logo.png");
 
-        match accounts
-            .update_profile(account_id, profile_id, profile_update)
-            .await
-        {
+        match accounts.update_profile(account_id, profile_id, profile_update).await {
             Ok(updated) => {
                 println!("   Successfully updated profile");
                 println!("   New name: {}", updated.name);

@@ -1,3 +1,5 @@
+//! Type definitions and data structures.
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 

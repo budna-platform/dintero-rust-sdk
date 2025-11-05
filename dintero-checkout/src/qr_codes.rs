@@ -1,12 +1,14 @@
+//! QR code generation for checkout.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QrCodeRequest {
     pub session_id: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<u32>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub format: Option<String>,
 }

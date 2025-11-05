@@ -1,9 +1,11 @@
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
-use uuid::Uuid;
-use crate::types::{Address, PhoneNumber, CustomerType, CustomerStatus, PaginatedResponse};
-use crate::error::Result;
+//! Customer management in loyalty programs.
+
 use crate::client::LoyaltyClient;
+use crate::error::Result;
+use crate::types::{Address, CustomerStatus, CustomerType, PaginatedResponse, PhoneNumber};
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Customer {
@@ -108,12 +110,8 @@ pub struct UpdateCustomerSettingsRequest {
 impl LoyaltyClient {
     pub async fn create_customer(&self, req: CreateCustomerRequest) -> Result<Customer> {
         let url = self.url("/customers");
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -126,11 +124,8 @@ impl LoyaltyClient {
 
     pub async fn get_customer(&self, customer_id: &Uuid) -> Result<Customer> {
         let url = self.url(&format!("/customers/{}", customer_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -141,14 +136,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn update_customer(&self, customer_id: &Uuid, req: UpdateCustomerRequest) -> Result<Customer> {
+    pub async fn update_customer(
+        &self,
+        customer_id: &Uuid,
+        req: UpdateCustomerRequest,
+    ) -> Result<Customer> {
         let url = self.url(&format!("/customers/{}", customer_id));
-        let response = self.http()
-            .put(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().put(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -161,11 +156,8 @@ impl LoyaltyClient {
 
     pub async fn delete_customer(&self, customer_id: &Uuid) -> Result<()> {
         let url = self.url(&format!("/customers/{}", customer_id));
-        let response = self.http()
-            .delete(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().delete(&url).send().await?;
+
         if response.status().is_success() {
             Ok(())
         } else {
@@ -176,10 +168,13 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn list_customers(&self, req: ListCustomersRequest) -> Result<PaginatedResponse<Customer>> {
+    pub async fn list_customers(
+        &self,
+        req: ListCustomersRequest,
+    ) -> Result<PaginatedResponse<Customer>> {
         let mut url = self.url("/customers");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
@@ -189,17 +184,14 @@ impl LoyaltyClient {
         if let Some(query) = &req.query {
             params.push(format!("query={}", urlencoding::encode(query)));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -210,14 +202,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn create_customer_token(&self, customer_id: &Uuid, req: CreateCustomerTokenRequest) -> Result<CustomerToken> {
+    pub async fn create_customer_token(
+        &self,
+        customer_id: &Uuid,
+        req: CreateCustomerTokenRequest,
+    ) -> Result<CustomerToken> {
         let url = self.url(&format!("/customers/{}/tokens", customer_id));
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -228,14 +220,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn accept_terms(&self, customer_id: &Uuid, req: AcceptTermsRequest) -> Result<CustomerTerms> {
+    pub async fn accept_terms(
+        &self,
+        customer_id: &Uuid,
+        req: AcceptTermsRequest,
+    ) -> Result<CustomerTerms> {
         let url = self.url(&format!("/customers/{}/terms", customer_id));
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -248,11 +240,8 @@ impl LoyaltyClient {
 
     pub async fn get_customer_settings(&self, customer_id: &Uuid) -> Result<CustomerSettings> {
         let url = self.url(&format!("/customers/{}/settings", customer_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -263,14 +252,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn update_customer_settings(&self, customer_id: &Uuid, req: UpdateCustomerSettingsRequest) -> Result<CustomerSettings> {
+    pub async fn update_customer_settings(
+        &self,
+        customer_id: &Uuid,
+        req: UpdateCustomerSettingsRequest,
+    ) -> Result<CustomerSettings> {
         let url = self.url(&format!("/customers/{}/settings", customer_id));
-        let response = self.http()
-            .put(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().put(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {

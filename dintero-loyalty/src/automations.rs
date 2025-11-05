@@ -1,9 +1,11 @@
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
-use uuid::Uuid;
-use crate::types::PaginatedResponse;
-use crate::error::Result;
+//! Automation rules for loyalty programs.
+
 use crate::client::LoyaltyClient;
+use crate::error::Result;
+use crate::types::PaginatedResponse;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AutomationRule {
@@ -65,14 +67,13 @@ pub struct ListAutomationRulesRequest {
 }
 
 impl LoyaltyClient {
-    pub async fn create_automation_rule(&self, req: CreateAutomationRuleRequest) -> Result<AutomationRule> {
+    pub async fn create_automation_rule(
+        &self,
+        req: CreateAutomationRuleRequest,
+    ) -> Result<AutomationRule> {
         let url = self.url("/automations/rules");
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -85,11 +86,8 @@ impl LoyaltyClient {
 
     pub async fn get_automation_rule(&self, rule_id: &Uuid) -> Result<AutomationRule> {
         let url = self.url(&format!("/automations/rules/{}", rule_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -100,14 +98,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn update_automation_rule(&self, rule_id: &Uuid, req: UpdateAutomationRuleRequest) -> Result<AutomationRule> {
+    pub async fn update_automation_rule(
+        &self,
+        rule_id: &Uuid,
+        req: UpdateAutomationRuleRequest,
+    ) -> Result<AutomationRule> {
         let url = self.url(&format!("/automations/rules/{}", rule_id));
-        let response = self.http()
-            .put(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().put(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -120,11 +118,8 @@ impl LoyaltyClient {
 
     pub async fn delete_automation_rule(&self, rule_id: &Uuid) -> Result<()> {
         let url = self.url(&format!("/automations/rules/{}", rule_id));
-        let response = self.http()
-            .delete(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().delete(&url).send().await?;
+
         if response.status().is_success() {
             Ok(())
         } else {
@@ -135,27 +130,27 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn list_automation_rules(&self, req: ListAutomationRulesRequest) -> Result<PaginatedResponse<AutomationRule>> {
+    pub async fn list_automation_rules(
+        &self,
+        req: ListAutomationRulesRequest,
+    ) -> Result<PaginatedResponse<AutomationRule>> {
         let mut url = self.url("/automations/rules");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
         if let Some(offset) = req.offset {
             params.push(format!("offset={}", offset));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {

@@ -5,9 +5,8 @@ use dintero::{Config, DinteroClient};
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
-    let config = Config::builder("T12345678")
-        .api_key("test_secret_key_1234567890abcdef")
-        .build()?;
+    let config =
+        Config::builder("T12345678").api_key("test_secret_key_1234567890abcdef").build()?;
 
     let client = DinteroClient::new(config)?;
     let insights = client.insights();
@@ -25,15 +24,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("1. Getting checkout transaction status KPIs...");
     match insights.kpis().get_checkout_transaction_status(kpi_params.clone()).await {
         Ok(response) => {
-            println!("Period: {} to {}", response.period_start, response.period_end);
+            println!(
+                "Period: {} to {}",
+                response.period_start, response.period_end
+            );
             println!("Transaction statuses:");
             for status_kpi in response.data {
                 println!(
                     "  - {}: {} transactions, {} {} total",
-                    status_kpi.status,
-                    status_kpi.count,
-                    status_kpi.amount,
-                    status_kpi.currency
+                    status_kpi.status, status_kpi.count, status_kpi.amount, status_kpi.currency
                 );
             }
         }
@@ -44,15 +43,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("2. Getting transaction KPIs...");
     match insights.kpis().get_transactions(kpi_params.clone()).await {
         Ok(response) => {
-            println!("Period: {} to {}", response.period_start, response.period_end);
+            println!(
+                "Period: {} to {}",
+                response.period_start, response.period_end
+            );
             let kpi = response.data;
             println!("Total transactions: {}", kpi.total_transactions);
             println!("Total amount: {} {}", kpi.total_amount, kpi.currency);
-            println!("Successful: {} transactions ({} {})", 
-                kpi.successful_transactions, kpi.successful_amount, kpi.currency);
+            println!(
+                "Successful: {} transactions ({} {})",
+                kpi.successful_transactions, kpi.successful_amount, kpi.currency
+            );
             println!("Failed: {} transactions", kpi.failed_transactions);
-            println!("Refunded: {} transactions ({} {})", 
-                kpi.refunded_transactions, kpi.refunded_amount, kpi.currency);
+            println!(
+                "Refunded: {} transactions ({} {})",
+                kpi.refunded_transactions, kpi.refunded_amount, kpi.currency
+            );
         }
         Err(e) => println!("Error: {}", e),
     }
@@ -61,7 +67,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("3. Getting payment method KPIs...");
     match insights.kpis().get_payment_methods(kpi_params.clone()).await {
         Ok(response) => {
-            println!("Period: {} to {}", response.period_start, response.period_end);
+            println!(
+                "Period: {} to {}",
+                response.period_start, response.period_end
+            );
             println!("Payment methods:");
             for method in response.data {
                 println!(
@@ -81,16 +90,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("4. Getting revenue KPIs...");
     match insights.kpis().get_revenue(kpi_params).await {
         Ok(response) => {
-            println!("Period: {} to {}", response.period_start, response.period_end);
-            println!("Total revenue: {} {}", response.total_revenue, response.currency);
+            println!(
+                "Period: {} to {}",
+                response.period_start, response.period_end
+            );
+            println!(
+                "Total revenue: {} {}",
+                response.total_revenue, response.currency
+            );
             println!("Daily breakdown:");
             for revenue in response.data.iter().take(7) {
                 println!(
                     "  - {}: {} {} ({} transactions)",
-                    revenue.date,
-                    revenue.revenue,
-                    revenue.currency,
-                    revenue.transaction_count
+                    revenue.date, revenue.revenue, revenue.currency, revenue.transaction_count
                 );
             }
             if response.data.len() > 7 {
@@ -115,7 +127,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     config.description.as_ref().unwrap_or(&"No description".to_string())
                 );
                 if let Some(schedule) = &config.schedule {
-                    println!("    Schedule: {:?} at {}", schedule.frequency, schedule.time);
+                    println!(
+                        "    Schedule: {:?} at {}",
+                        schedule.frequency, schedule.time
+                    );
                 }
                 println!("    Recipients: {}", config.recipients.join(", "));
             }

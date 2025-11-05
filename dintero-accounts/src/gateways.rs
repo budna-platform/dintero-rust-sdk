@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::error::Result;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};

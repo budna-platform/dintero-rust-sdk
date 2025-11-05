@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use super::types::*;
 use serde::{Deserialize, Serialize};
 

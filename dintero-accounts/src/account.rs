@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::error::Result;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -55,28 +57,26 @@ pub struct CreateAssetRequest {
 
 impl crate::client::AccountsClient {
     pub async fn get_account_details(&self) -> Result<AccountDetails> {
-        self.execute_request(Method::GET, "accounts/current", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "accounts/current", None::<&()>).await
     }
 
-    pub async fn update_account_details(&self, request: &UpdateAccountRequest) -> Result<AccountDetails> {
-        self.execute_request(Method::PUT, "accounts/current", Some(request))
-            .await
+    pub async fn update_account_details(
+        &self,
+        request: &UpdateAccountRequest,
+    ) -> Result<AccountDetails> {
+        self.execute_request(Method::PUT, "accounts/current", Some(request)).await
     }
 
     pub async fn get_price_packages(&self) -> Result<Vec<PricePackage>> {
-        self.execute_request(Method::GET, "accounts/current/price-packages", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "accounts/current/price-packages", None::<&()>).await
     }
 
     pub async fn list_assets(&self) -> Result<Vec<Asset>> {
-        self.execute_request(Method::GET, "accounts/current/assets", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "accounts/current/assets", None::<&()>).await
     }
 
     pub async fn upload_asset(&self, request: &CreateAssetRequest) -> Result<Asset> {
-        self.execute_request(Method::POST, "accounts/current/assets", Some(request))
-            .await
+        self.execute_request(Method::POST, "accounts/current/assets", Some(request)).await
     }
 
     pub async fn delete_asset(&self, asset_id: &str) -> Result<()> {

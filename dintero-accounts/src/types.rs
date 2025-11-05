@@ -1,3 +1,5 @@
+//! Type definitions for accounts.
+
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

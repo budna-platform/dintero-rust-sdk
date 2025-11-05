@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -28,10 +30,7 @@ pub struct CreateOrderSessionRequest {
 
 impl CreateOrderSessionRequest {
     pub fn new() -> Self {
-        Self {
-            return_url: None,
-            metadata: None,
-        }
+        Self { return_url: None, metadata: None }
     }
 
     pub fn with_return_url(mut self, url: impl Into<String>) -> Self {

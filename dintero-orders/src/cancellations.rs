@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -26,10 +28,7 @@ pub struct CreateCancellationRequest {
 
 impl CreateCancellationRequest {
     pub fn new() -> Self {
-        Self {
-            amount: None,
-            reason: None,
-        }
+        Self { amount: None, reason: None }
     }
 
     pub fn with_amount(mut self, amount: i64) -> Self {

@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -6,7 +8,7 @@ pub struct SellerBalance {
     pub available_balance: i64,
     pub pending_balance: i64,
     pub currency: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<String>,
 }
@@ -19,10 +21,10 @@ pub struct SellerTransfer {
     pub payout_destination: String,
     pub status: String,
     pub created_at: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub settled_at: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reference: Option<String>,
 }
@@ -83,7 +85,7 @@ impl ListSellerTransfersParamsBuilder {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SellerTransfersResponse {
     pub transfers: Vec<SellerTransfer>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
 }

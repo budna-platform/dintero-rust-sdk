@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::error::Result;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -90,63 +92,52 @@ pub struct GenerateRecoveryCodesResponse {
 
 impl crate::client::AccountsClient {
     pub async fn create_token(&self, request: &TokenRequest) -> Result<TokenResponse> {
-        self.execute_request(Method::POST, "oauth/token", Some(request))
-            .await
+        self.execute_request(Method::POST, "oauth/token", Some(request)).await
     }
 
     pub async fn revoke_token(&self, request: &RevokeTokenRequest) -> Result<()> {
-        self.execute_request(Method::POST, "oauth/revoke", Some(request))
-            .await
+        self.execute_request(Method::POST, "oauth/revoke", Some(request)).await
     }
 
     pub async fn initiate_passwordless_auth(
         &self,
         request: &PasswordlessAuthRequest,
     ) -> Result<()> {
-        self.execute_request(Method::POST, "auth/passwordless/initiate", Some(request))
-            .await
+        self.execute_request(Method::POST, "auth/passwordless/initiate", Some(request)).await
     }
 
     pub async fn verify_passwordless_auth(
         &self,
         request: &PasswordlessVerifyRequest,
     ) -> Result<TokenResponse> {
-        self.execute_request(Method::POST, "auth/passwordless/verify", Some(request))
-            .await
+        self.execute_request(Method::POST, "auth/passwordless/verify", Some(request)).await
     }
 
     pub async fn setup_mfa(&self, request: &MfaSetupRequest) -> Result<MfaSetupResponse> {
-        self.execute_request(Method::POST, "auth/mfa/setup", Some(request))
-            .await
+        self.execute_request(Method::POST, "auth/mfa/setup", Some(request)).await
     }
 
     pub async fn verify_mfa(&self, request: &MfaVerifyRequest) -> Result<()> {
-        self.execute_request(Method::POST, "auth/mfa/verify", Some(request))
-            .await
+        self.execute_request(Method::POST, "auth/mfa/verify", Some(request)).await
     }
 
     pub async fn disable_mfa(&self) -> Result<()> {
-        self.execute_request(Method::DELETE, "auth/mfa", None::<&()>)
-            .await
+        self.execute_request(Method::DELETE, "auth/mfa", None::<&()>).await
     }
 
     pub async fn create_mfa_challenge(&self, request: &MfaChallengeRequest) -> Result<()> {
-        self.execute_request(Method::POST, "auth/mfa/challenge", Some(request))
-            .await
+        self.execute_request(Method::POST, "auth/mfa/challenge", Some(request)).await
     }
 
     pub async fn get_oidc_configuration(&self) -> Result<OidcConfiguration> {
-        self.execute_request(Method::GET, ".well-known/openid-configuration", None::<&()>)
-            .await
+        self.execute_request(Method::GET, ".well-known/openid-configuration", None::<&()>).await
     }
 
     pub async fn generate_recovery_codes(&self) -> Result<GenerateRecoveryCodesResponse> {
-        self.execute_request(Method::POST, "auth/recovery-codes", None::<&()>)
-            .await
+        self.execute_request(Method::POST, "auth/recovery-codes", None::<&()>).await
     }
 
     pub async fn list_recovery_codes(&self) -> Result<Vec<RecoveryCode>> {
-        self.execute_request(Method::GET, "auth/recovery-codes", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "auth/recovery-codes", None::<&()>).await
     }
 }

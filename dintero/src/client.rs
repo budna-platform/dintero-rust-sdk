@@ -1,3 +1,8 @@
+//! HTTP client for making authenticated requests to the Dintero API.
+//!
+//! This module provides the core HTTP client that handles authentication,
+//! retries, and request/response processing.
+
 use crate::auth::AuthProvider;
 use crate::config::Config;
 use crate::error::{Error, Result};
@@ -7,6 +12,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use tracing::{debug, warn};
 
+/// HTTP client for making authenticated requests to the Dintero API.
 pub struct HttpClient {
     client: Client,
     auth: Arc<dyn AuthProvider>,

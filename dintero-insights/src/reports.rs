@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::client::InsightsClient;
 use crate::types::*;
 
@@ -14,15 +16,8 @@ impl ReportsClient {
             self.client.base_url, self.client.account_id
         );
 
-        let response = self
-            .client
-            .http_client
-            .get(&url)
-            .send()
-            .await?
-            .error_for_status()?
-            .json()
-            .await?;
+        let response =
+            self.client.http_client.get(&url).send().await?.error_for_status()?.json().await?;
 
         Ok(response)
     }
@@ -36,15 +31,8 @@ impl ReportsClient {
             self.client.base_url, self.client.account_id, configuration_id
         );
 
-        let response = self
-            .client
-            .http_client
-            .get(&url)
-            .send()
-            .await?
-            .error_for_status()?
-            .json()
-            .await?;
+        let response =
+            self.client.http_client.get(&url).send().await?.error_for_status()?.json().await?;
 
         Ok(response)
     }
@@ -105,12 +93,7 @@ impl ReportsClient {
             self.client.base_url, self.client.account_id, configuration_id
         );
 
-        self.client
-            .http_client
-            .delete(&url)
-            .send()
-            .await?
-            .error_for_status()?;
+        self.client.http_client.delete(&url).send().await?.error_for_status()?;
 
         Ok(())
     }

@@ -19,10 +19,8 @@ async fn main() -> StdResult<()> {
 
     // ===== TRANSACTIONS =====
     println!("📋 1. Listing Transactions...");
-    let list_params = ListTransactionsParams::builder()
-        .limit(10)
-        .status(TransactionStatus::Authorized)
-        .build();
+    let list_params =
+        ListTransactionsParams::builder().limit(10).status(TransactionStatus::Authorized).build();
 
     let transactions = payments_client.list_transactions(list_params).await?;
     println!(
@@ -47,9 +45,8 @@ async fn main() -> StdResult<()> {
                 "order_number": "ORD-98765"
             }));
 
-        let updated_txn = payments_client
-            .update_transaction(transaction_id, update_request)
-            .await?;
+        let updated_txn =
+            payments_client.update_transaction(transaction_id, update_request).await?;
         println!("   ✅ Transaction updated");
         if let Some(ref_id) = &updated_txn.merchant_reference {
             println!("   ✅ Merchant reference: {}", ref_id);
@@ -58,9 +55,7 @@ async fn main() -> StdResult<()> {
         println!("\n📸 4. Capturing Transaction...");
         let capture_request = CaptureTransactionRequest::new(txn.amount);
 
-        let captured = payments_client
-            .capture_transaction(transaction_id, capture_request)
-            .await?;
+        let captured = payments_client.capture_transaction(transaction_id, capture_request).await?;
         println!("   ✅ Captured: {} {}", captured.amount, captured.currency);
 
         println!("\n↩️  5. Refunding Transaction (partial)...");
@@ -68,40 +63,30 @@ async fn main() -> StdResult<()> {
         let refund_request = RefundTransactionRequest::new(refund_amount)
             .with_reason("Customer requested partial refund");
 
-        let refunded = payments_client
-            .refund_transaction(transaction_id, refund_request)
-            .await?;
+        let refunded = payments_client.refund_transaction(transaction_id, refund_request).await?;
         println!("   ✅ Refunded: {} {}", refunded.amount, refunded.currency);
     }
 
     // Demo void on a different transaction
     println!("\n❌ 6. Voiding Authorization...");
-    if let Some(auth_txn) = transactions
-        .transactions
-        .iter()
-        .find(|t| t.status == TransactionStatus::Authorized)
+    if let Some(auth_txn) =
+        transactions.transactions.iter().find(|t| t.status == TransactionStatus::Authorized)
     {
         let void_request = VoidTransactionRequest::new().with_reason("Customer cancelled order");
 
-        let voided = payments_client
-            .void_transaction(&auth_txn.id, void_request)
-            .await?;
+        let voided = payments_client.void_transaction(&auth_txn.id, void_request).await?;
         println!("   ✅ Transaction voided: {}", voided.id);
     } else {
         println!("   ⚠️  No authorized transactions to void");
     }
 
     println!("\n⏰ 7. Extending Authorization...");
-    if let Some(auth_txn) = transactions
-        .transactions
-        .iter()
-        .find(|t| t.status == TransactionStatus::Authorized)
+    if let Some(auth_txn) =
+        transactions.transactions.iter().find(|t| t.status == TransactionStatus::Authorized)
     {
         let extend_request = ExtendAuthorizationRequest::new(7);
 
-        let extended = payments_client
-            .extend_authorization(&auth_txn.id, extend_request)
-            .await?;
+        let extended = payments_client.extend_authorization(&auth_txn.id, extend_request).await?;
         println!(
             "   ✅ Authorization extended for transaction: {}",
             extended.id
@@ -131,9 +116,7 @@ async fn main() -> StdResult<()> {
         .with_file_format("CSV")
         .enabled(true);
 
-    let config_created = payments_client
-        .create_settlement_report_config(report_config)
-        .await?;
+    let config_created = payments_client.create_settlement_report_config(report_config).await?;
     println!(
         "   ✅ Settlement report config created: {}",
         config_created.id
@@ -145,9 +128,7 @@ async fn main() -> StdResult<()> {
 
     if let Some(config) = configs.first() {
         println!("\n🔍 11. Getting Settlement Report Config Details...");
-        let config_details = payments_client
-            .get_settlement_report_config(&config.id)
-            .await?;
+        let config_details = payments_client.get_settlement_report_config(&config.id).await?;
         println!("   ✅ Config ID: {}", config_details.id);
         println!("   ✅ Enabled: {}", config_details.enabled);
 
@@ -156,9 +137,8 @@ async fn main() -> StdResult<()> {
             .with_email("accounting@example.com")
             .enabled(true);
 
-        let updated_config = payments_client
-            .update_settlement_report_config(&config.id, update_config)
-            .await?;
+        let updated_config =
+            payments_client.update_settlement_report_config(&config.id, update_config).await?;
         println!("   ✅ Config updated");
         if let Some(email) = &updated_config.email {
             println!("   ✅ New email: {}", email);
@@ -171,9 +151,7 @@ async fn main() -> StdResult<()> {
         CreatePayoutDestinationRequest::new("Main Business Account", "NO9386011117947")
             .with_bank_code("DNBANOKK");
 
-    let created_dest = payments_client
-        .create_payout_destination(payout_dest)
-        .await?;
+    let created_dest = payments_client.create_payout_destination(payout_dest).await?;
     println!("   ✅ Payout destination created: {}", created_dest.id);
 
     println!("\n📋 14. Listing Payout Destinations...");
@@ -197,9 +175,7 @@ async fn main() -> StdResult<()> {
         println!("\n💸 17. Creating Payout Transfer...");
         let transfer_request = CreatePayoutTransferRequest::new(100000, "NOK", dest.id.clone());
 
-        let created_transfer = payments_client
-            .create_payout_transfer(transfer_request)
-            .await?;
+        let created_transfer = payments_client.create_payout_transfer(transfer_request).await?;
         println!("   ✅ Transfer created: {}", created_transfer.id);
         println!(
             "   ✅ Amount: {} {}",
@@ -210,9 +186,7 @@ async fn main() -> StdResult<()> {
     // ===== CLEANUP =====
     if let Some(config) = configs.first() {
         println!("\n🗑️  18. Deleting Settlement Report Config...");
-        payments_client
-            .delete_settlement_report_config(&config.id)
-            .await?;
+        payments_client.delete_settlement_report_config(&config.id).await?;
         println!("   ✅ Config deleted");
     }
 

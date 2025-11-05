@@ -1,9 +1,11 @@
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
-use uuid::Uuid;
-use crate::types::PaginatedResponse;
-use crate::error::Result;
+//! Webhook management for loyalty events.
+
 use crate::client::LoyaltyClient;
+use crate::error::Result;
+use crate::types::PaginatedResponse;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WebhookSubscription {
@@ -85,14 +87,13 @@ pub struct ListDeliveriesRequest {
 }
 
 impl LoyaltyClient {
-    pub async fn create_webhook_subscription(&self, req: CreateWebhookSubscriptionRequest) -> Result<WebhookSubscription> {
+    pub async fn create_webhook_subscription(
+        &self,
+        req: CreateWebhookSubscriptionRequest,
+    ) -> Result<WebhookSubscription> {
         let url = self.url("/webhooks/subscriptions");
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -103,13 +104,13 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn get_webhook_subscription(&self, subscription_id: &Uuid) -> Result<WebhookSubscription> {
+    pub async fn get_webhook_subscription(
+        &self,
+        subscription_id: &Uuid,
+    ) -> Result<WebhookSubscription> {
         let url = self.url(&format!("/webhooks/subscriptions/{}", subscription_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -120,14 +121,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn update_webhook_subscription(&self, subscription_id: &Uuid, req: UpdateWebhookSubscriptionRequest) -> Result<WebhookSubscription> {
+    pub async fn update_webhook_subscription(
+        &self,
+        subscription_id: &Uuid,
+        req: UpdateWebhookSubscriptionRequest,
+    ) -> Result<WebhookSubscription> {
         let url = self.url(&format!("/webhooks/subscriptions/{}", subscription_id));
-        let response = self.http()
-            .put(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().put(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -140,11 +141,8 @@ impl LoyaltyClient {
 
     pub async fn delete_webhook_subscription(&self, subscription_id: &Uuid) -> Result<()> {
         let url = self.url(&format!("/webhooks/subscriptions/{}", subscription_id));
-        let response = self.http()
-            .delete(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().delete(&url).send().await?;
+
         if response.status().is_success() {
             Ok(())
         } else {
@@ -155,27 +153,27 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn list_webhook_subscriptions(&self, req: ListWebhooksRequest) -> Result<PaginatedResponse<WebhookSubscription>> {
+    pub async fn list_webhook_subscriptions(
+        &self,
+        req: ListWebhooksRequest,
+    ) -> Result<PaginatedResponse<WebhookSubscription>> {
         let mut url = self.url("/webhooks/subscriptions");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
         if let Some(offset) = req.offset {
             params.push(format!("offset={}", offset));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -188,11 +186,8 @@ impl LoyaltyClient {
 
     pub async fn get_webhook_delivery(&self, delivery_id: &Uuid) -> Result<WebhookDelivery> {
         let url = self.url(&format!("/webhooks/deliveries/{}", delivery_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -203,10 +198,13 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn list_webhook_deliveries(&self, req: ListDeliveriesRequest) -> Result<PaginatedResponse<WebhookDelivery>> {
+    pub async fn list_webhook_deliveries(
+        &self,
+        req: ListDeliveriesRequest,
+    ) -> Result<PaginatedResponse<WebhookDelivery>> {
         let mut url = self.url("/webhooks/deliveries");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
@@ -216,17 +214,14 @@ impl LoyaltyClient {
         if let Some(subscription_id) = req.subscription_id {
             params.push(format!("subscription_id={}", subscription_id));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -239,11 +234,8 @@ impl LoyaltyClient {
 
     pub async fn retry_webhook_delivery(&self, delivery_id: &Uuid) -> Result<WebhookDelivery> {
         let url = self.url(&format!("/webhooks/deliveries/{}/retry", delivery_id));
-        let response = self.http()
-            .post(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {

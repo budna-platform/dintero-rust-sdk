@@ -1,9 +1,11 @@
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
-use uuid::Uuid;
-use crate::types::PaginatedResponse;
-use crate::error::Result;
+//! Product management in loyalty programs.
+
 use crate::client::LoyaltyClient;
+use crate::error::Result;
+use crate::types::PaginatedResponse;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ProductCatalog {
@@ -81,14 +83,13 @@ pub struct ListProductsRequest {
 }
 
 impl LoyaltyClient {
-    pub async fn create_product_catalog(&self, req: CreateProductCatalogRequest) -> Result<ProductCatalog> {
+    pub async fn create_product_catalog(
+        &self,
+        req: CreateProductCatalogRequest,
+    ) -> Result<ProductCatalog> {
         let url = self.url("/products/catalogs");
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -101,11 +102,8 @@ impl LoyaltyClient {
 
     pub async fn get_product_catalog(&self, catalog_id: &Uuid) -> Result<ProductCatalog> {
         let url = self.url(&format!("/products/catalogs/{}", catalog_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -116,14 +114,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn update_product_catalog(&self, catalog_id: &Uuid, req: UpdateProductCatalogRequest) -> Result<ProductCatalog> {
+    pub async fn update_product_catalog(
+        &self,
+        catalog_id: &Uuid,
+        req: UpdateProductCatalogRequest,
+    ) -> Result<ProductCatalog> {
         let url = self.url(&format!("/products/catalogs/{}", catalog_id));
-        let response = self.http()
-            .put(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().put(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -136,11 +134,8 @@ impl LoyaltyClient {
 
     pub async fn delete_product_catalog(&self, catalog_id: &Uuid) -> Result<()> {
         let url = self.url(&format!("/products/catalogs/{}", catalog_id));
-        let response = self.http()
-            .delete(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().delete(&url).send().await?;
+
         if response.status().is_success() {
             Ok(())
         } else {
@@ -151,27 +146,27 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn list_product_catalogs(&self, req: ListProductsRequest) -> Result<PaginatedResponse<ProductCatalog>> {
+    pub async fn list_product_catalogs(
+        &self,
+        req: ListProductsRequest,
+    ) -> Result<PaginatedResponse<ProductCatalog>> {
         let mut url = self.url("/products/catalogs");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
         if let Some(offset) = req.offset {
             params.push(format!("offset={}", offset));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -184,12 +179,8 @@ impl LoyaltyClient {
 
     pub async fn create_product_item(&self, req: CreateProductItemRequest) -> Result<ProductItem> {
         let url = self.url("/products/items");
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -202,11 +193,8 @@ impl LoyaltyClient {
 
     pub async fn get_product_item(&self, item_id: &Uuid) -> Result<ProductItem> {
         let url = self.url(&format!("/products/items/{}", item_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -217,14 +205,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn update_product_item(&self, item_id: &Uuid, req: UpdateProductItemRequest) -> Result<ProductItem> {
+    pub async fn update_product_item(
+        &self,
+        item_id: &Uuid,
+        req: UpdateProductItemRequest,
+    ) -> Result<ProductItem> {
         let url = self.url(&format!("/products/items/{}", item_id));
-        let response = self.http()
-            .put(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().put(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -237,11 +225,8 @@ impl LoyaltyClient {
 
     pub async fn delete_product_item(&self, item_id: &Uuid) -> Result<()> {
         let url = self.url(&format!("/products/items/{}", item_id));
-        let response = self.http()
-            .delete(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().delete(&url).send().await?;
+
         if response.status().is_success() {
             Ok(())
         } else {
@@ -252,10 +237,13 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn list_product_items(&self, req: ListProductsRequest) -> Result<PaginatedResponse<ProductItem>> {
+    pub async fn list_product_items(
+        &self,
+        req: ListProductsRequest,
+    ) -> Result<PaginatedResponse<ProductItem>> {
         let mut url = self.url("/products/items");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
@@ -265,17 +253,14 @@ impl LoyaltyClient {
         if let Some(catalog_id) = req.catalog_id {
             params.push(format!("catalog_id={}", catalog_id));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {

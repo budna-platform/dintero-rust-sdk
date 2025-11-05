@@ -1,3 +1,5 @@
+//! Common types used across the Dintero SDK.
+
 pub mod address;
 pub mod metadata;
 pub mod money;

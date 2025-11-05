@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
@@ -51,9 +53,7 @@ impl Money {
     pub fn from_major(major: i64, currency: Currency) -> Self {
         let minor_units = currency.minor_units();
         let multiplier = 10_i64.pow(minor_units);
-        Self {
-            amount: major * multiplier,
-        }
+        Self { amount: major * multiplier }
     }
 
     pub fn to_major(&self, currency: Currency) -> f64 {

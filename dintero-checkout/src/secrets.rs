@@ -1,3 +1,5 @@
+//! Secret management for checkout sessions.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5,7 +7,7 @@ pub struct SignatureSecret {
     pub id: String,
     pub secret: String,
     pub created_at: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
@@ -22,9 +24,7 @@ impl CreateSignatureSecretRequest {
     }
 
     pub fn with_description(description: impl Into<String>) -> Self {
-        Self {
-            description: Some(description.into()),
-        }
+        Self { description: Some(description.into()) }
     }
 }
 

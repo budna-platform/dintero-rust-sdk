@@ -43,32 +43,25 @@ async fn main() -> StdResult<()> {
     let new_item = AddDraftOrderItemRequest::new("item-2", "Setup Fee", 1, 50000, 10000, 2500)
         .with_product_id("SETUP-001");
 
-    orders_client
-        .add_draft_order_item(&created_draft.id, new_item)
-        .await?;
+    orders_client.add_draft_order_item(&created_draft.id, new_item).await?;
     println!("   ✅ Item added to draft order");
 
     println!("\n✔️  3. Completing Draft Order (converting to real order)...");
-    let completed_order = orders_client
-        .complete_draft_order(&created_draft.id)
-        .await?;
+    let completed_order = orders_client.complete_draft_order(&created_draft.id).await?;
     println!("   ✅ Order created from draft: {}", completed_order.id);
 
     // ===== ORDER OPERATIONS =====
     println!("\n💳 4. Creating Authorization...");
     let auth_request = CreateAuthorizationRequest::new(149900).with_payment_product("vipps");
 
-    let authorization = orders_client
-        .create_authorization(&completed_order.id, auth_request)
-        .await?;
+    let authorization =
+        orders_client.create_authorization(&completed_order.id, auth_request).await?;
     println!("   ✅ Authorization created: {}", authorization.id);
 
     println!("\n📸 5. Creating Capture...");
     let capture_request = CreateCaptureRequest::new(100000);
 
-    let capture = orders_client
-        .create_capture(&completed_order.id, capture_request)
-        .await?;
+    let capture = orders_client.create_capture(&completed_order.id, capture_request).await?;
     println!(
         "   ✅ Captured amount: {} {}",
         capture.amount, capture.currency
@@ -78,9 +71,7 @@ async fn main() -> StdResult<()> {
     let refund_request =
         CreateRefundRequest::new(25000).with_reason("Customer requested partial refund");
 
-    let refund = orders_client
-        .create_refund(&completed_order.id, refund_request)
-        .await?;
+    let refund = orders_client.create_refund(&completed_order.id, refund_request).await?;
     println!(
         "   ✅ Refunded amount: {} {}",
         refund.amount, refund.currency
@@ -91,9 +82,7 @@ async fn main() -> StdResult<()> {
     let session_request =
         CreateOrderSessionRequest::new().with_return_url("https://example.com/order-complete");
 
-    let session = orders_client
-        .create_order_session(&completed_order.id, session_request)
-        .await?;
+    let session = orders_client.create_order_session(&completed_order.id, session_request).await?;
     println!("   ✅ Session created: {}", session.id);
     if let Some(url) = &session.url {
         println!("   🌐 Checkout URL: {}", url);
@@ -103,9 +92,7 @@ async fn main() -> StdResult<()> {
     println!("\n💬 8. Adding Comment to Order...");
     let comment_request = CreateCommentRequest::new("Customer requested express shipping");
 
-    let comment = orders_client
-        .create_comment(&completed_order.id, comment_request)
-        .await?;
+    let comment = orders_client.create_comment(&completed_order.id, comment_request).await?;
     println!("   ✅ Comment added: {}", comment.id);
 
     println!("\n📅 9. Creating Custom Event...");
@@ -116,16 +103,12 @@ async fn main() -> StdResult<()> {
 
     let event_request = CreateEventRequest::new("custom.order.processed").with_data(event_data);
 
-    let event = orders_client
-        .create_event(&completed_order.id, event_request)
-        .await?;
+    let event = orders_client.create_event(&completed_order.id, event_request).await?;
     println!("   ✅ Event created: {} ({})", event.id, event.event_type);
 
     // ===== LISTING OPERATIONS =====
     println!("\n📊 10. Listing All Authorizations...");
-    let auths = orders_client
-        .list_authorizations(&completed_order.id)
-        .await?;
+    let auths = orders_client.list_authorizations(&completed_order.id).await?;
     println!(
         "   ✅ Found {} authorization(s)",
         auths.authorizations.len()
@@ -154,10 +137,7 @@ async fn main() -> StdResult<()> {
 
     // ===== LISTING ORDERS WITH FILTERS =====
     println!("\n📋 16. Listing Orders with Filters...");
-    let list_params = ListOrdersParams::builder()
-        .limit(10)
-        .status(OrderStatus::Captured)
-        .build();
+    let list_params = ListOrdersParams::builder().limit(10).status(OrderStatus::Captured).build();
 
     let orders = orders_client.list_orders(list_params).await?;
     println!("   ✅ Found {} order(s)", orders.orders.len());
@@ -175,9 +155,8 @@ async fn main() -> StdResult<()> {
     println!("\n❌ 18. Creating Cancellation...");
     let cancel_request = CreateCancellationRequest::new().with_reason("Test cancellation");
 
-    let cancellation = orders_client
-        .create_cancellation(&completed_order.id, cancel_request)
-        .await?;
+    let cancellation =
+        orders_client.create_cancellation(&completed_order.id, cancel_request).await?;
     println!("   ✅ Cancellation created: {}", cancellation.id);
 
     // ===== FINAL STATUS =====

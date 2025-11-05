@@ -1,3 +1,5 @@
+//! Type definitions and data structures.
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -227,11 +229,7 @@ impl OrderBuilder {
             amount: self.amount,
             currency: self.currency,
             merchant_reference: self.merchant_reference,
-            items: if self.items.is_empty() {
-                None
-            } else {
-                Some(self.items)
-            },
+            items: if self.items.is_empty() { None } else { Some(self.items) },
             vat_amount: self.vat_amount,
             shipping_address: self.shipping_address,
             billing_address: self.billing_address,

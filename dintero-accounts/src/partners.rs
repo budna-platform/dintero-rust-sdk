@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::error::Result;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -83,8 +85,7 @@ impl crate::client::AccountsClient {
         &self,
         request: &CreateOnboardingLinkRequest,
     ) -> Result<OnboardingLink> {
-        self.execute_request(Method::POST, "partners/onboarding-links", Some(request))
-            .await
+        self.execute_request(Method::POST, "partners/onboarding-links", Some(request)).await
     }
 
     pub async fn get_onboarding_link(&self, link_id: &str) -> Result<OnboardingLink> {
@@ -100,25 +101,21 @@ impl crate::client::AccountsClient {
         &self,
         request: &CreateAccountSignupRequest,
     ) -> Result<AccountSignup> {
-        self.execute_request(Method::POST, "accounts/signup", Some(request))
-            .await
+        self.execute_request(Method::POST, "accounts/signup", Some(request)).await
     }
 
     pub async fn verify_signup(&self, request: &VerifySignupRequest) -> Result<AccountSignup> {
-        self.execute_request(Method::POST, "accounts/signup/verify", Some(request))
-            .await
+        self.execute_request(Method::POST, "accounts/signup/verify", Some(request)).await
     }
 
     pub async fn search_merchants(
         &self,
         request: &SearchMerchantsRequest,
     ) -> Result<Vec<MerchantMatch>> {
-        self.execute_request(Method::POST, "partners/merchants/search", Some(request))
-            .await
+        self.execute_request(Method::POST, "partners/merchants/search", Some(request)).await
     }
 
     pub async fn terminate_merchant(&self, request: &TerminateMerchantRequest) -> Result<()> {
-        self.execute_request(Method::POST, "partners/merchants/terminate", Some(request))
-            .await
+        self.execute_request(Method::POST, "partners/merchants/terminate", Some(request)).await
     }
 }

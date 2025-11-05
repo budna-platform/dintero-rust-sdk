@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::error::Result;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -74,8 +76,7 @@ pub struct RotateClientSecretResponse {
 
 impl crate::client::AccountsClient {
     pub async fn list_oauth_clients(&self) -> Result<Vec<OAuthClient>> {
-        self.execute_request(Method::GET, "oauth/clients", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "oauth/clients", None::<&()>).await
     }
 
     pub async fn get_oauth_client(&self, client_id: &str) -> Result<OAuthClient> {
@@ -91,8 +92,7 @@ impl crate::client::AccountsClient {
         &self,
         request: &CreateOAuthClientRequest,
     ) -> Result<OAuthClient> {
-        self.execute_request(Method::POST, "oauth/clients", Some(request))
-            .await
+        self.execute_request(Method::POST, "oauth/clients", Some(request)).await
     }
 
     pub async fn update_oauth_client(
@@ -130,13 +130,14 @@ impl crate::client::AccountsClient {
     }
 
     pub async fn list_client_grants(&self) -> Result<Vec<ClientGrant>> {
-        self.execute_request(Method::GET, "oauth/client-grants", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "oauth/client-grants", None::<&()>).await
     }
 
-    pub async fn create_client_grant(&self, request: &CreateClientGrantRequest) -> Result<ClientGrant> {
-        self.execute_request(Method::POST, "oauth/client-grants", Some(request))
-            .await
+    pub async fn create_client_grant(
+        &self,
+        request: &CreateClientGrantRequest,
+    ) -> Result<ClientGrant> {
+        self.execute_request(Method::POST, "oauth/client-grants", Some(request)).await
     }
 
     pub async fn delete_client_grant(&self, grant_id: &str) -> Result<()> {
@@ -149,8 +150,7 @@ impl crate::client::AccountsClient {
     }
 
     pub async fn list_api_credentials(&self) -> Result<Vec<ApiCredential>> {
-        self.execute_request(Method::GET, "accounts/current/api-credentials", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "accounts/current/api-credentials", None::<&()>).await
     }
 
     pub async fn create_api_credential(

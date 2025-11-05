@@ -1,9 +1,11 @@
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
-use uuid::Uuid;
-use crate::types::PaginatedResponse;
-use crate::error::Result;
+//! Wallet management for loyalty points.
+
 use crate::client::LoyaltyClient;
+use crate::error::Result;
+use crate::types::PaginatedResponse;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VirtualCard {
@@ -104,12 +106,8 @@ pub struct ListTransactionsRequest {
 impl LoyaltyClient {
     pub async fn create_virtual_card(&self, req: CreateVirtualCardRequest) -> Result<VirtualCard> {
         let url = self.url("/wallets/cards");
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -122,11 +120,8 @@ impl LoyaltyClient {
 
     pub async fn get_virtual_card(&self, card_id: &Uuid) -> Result<VirtualCard> {
         let url = self.url(&format!("/wallets/cards/{}", card_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -137,14 +132,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn update_virtual_card(&self, card_id: &Uuid, req: UpdateVirtualCardRequest) -> Result<VirtualCard> {
+    pub async fn update_virtual_card(
+        &self,
+        card_id: &Uuid,
+        req: UpdateVirtualCardRequest,
+    ) -> Result<VirtualCard> {
         let url = self.url(&format!("/wallets/cards/{}", card_id));
-        let response = self.http()
-            .put(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().put(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -157,11 +152,8 @@ impl LoyaltyClient {
 
     pub async fn delete_virtual_card(&self, card_id: &Uuid) -> Result<()> {
         let url = self.url(&format!("/wallets/cards/{}", card_id));
-        let response = self.http()
-            .delete(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().delete(&url).send().await?;
+
         if response.status().is_success() {
             Ok(())
         } else {
@@ -172,10 +164,13 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn list_virtual_cards(&self, req: ListCardsRequest) -> Result<PaginatedResponse<VirtualCard>> {
+    pub async fn list_virtual_cards(
+        &self,
+        req: ListCardsRequest,
+    ) -> Result<PaginatedResponse<VirtualCard>> {
         let mut url = self.url("/wallets/cards");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
@@ -185,17 +180,14 @@ impl LoyaltyClient {
         if let Some(customer_id) = req.customer_id {
             params.push(format!("customer_id={}", customer_id));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -206,14 +198,13 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn create_card_transaction(&self, req: CreateCardTransactionRequest) -> Result<CardTransaction> {
+    pub async fn create_card_transaction(
+        &self,
+        req: CreateCardTransactionRequest,
+    ) -> Result<CardTransaction> {
         let url = self.url("/wallets/transactions");
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -226,11 +217,8 @@ impl LoyaltyClient {
 
     pub async fn get_card_transaction(&self, transaction_id: &Uuid) -> Result<CardTransaction> {
         let url = self.url(&format!("/wallets/transactions/{}", transaction_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -241,10 +229,13 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn list_card_transactions(&self, req: ListTransactionsRequest) -> Result<PaginatedResponse<CardTransaction>> {
+    pub async fn list_card_transactions(
+        &self,
+        req: ListTransactionsRequest,
+    ) -> Result<PaginatedResponse<CardTransaction>> {
         let mut url = self.url("/wallets/transactions");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
@@ -254,17 +245,14 @@ impl LoyaltyClient {
         if let Some(card_id) = req.card_id {
             params.push(format!("card_id={}", card_id));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {

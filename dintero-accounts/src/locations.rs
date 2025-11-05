@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::error::Result;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
@@ -84,8 +86,7 @@ pub struct UpdateTerminalRequest {
 
 impl crate::client::AccountsClient {
     pub async fn list_locations(&self) -> Result<Vec<Location>> {
-        self.execute_request(Method::GET, "accounts/current/locations", None::<&()>)
-            .await
+        self.execute_request(Method::GET, "accounts/current/locations", None::<&()>).await
     }
 
     pub async fn get_location(&self, location_id: &str) -> Result<Location> {
@@ -98,8 +99,7 @@ impl crate::client::AccountsClient {
     }
 
     pub async fn create_location(&self, request: &CreateLocationRequest) -> Result<Location> {
-        self.execute_request(Method::POST, "accounts/current/locations", Some(request))
-            .await
+        self.execute_request(Method::POST, "accounts/current/locations", Some(request)).await
     }
 
     pub async fn update_location(

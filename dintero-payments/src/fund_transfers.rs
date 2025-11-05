@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize)]
@@ -6,10 +8,10 @@ pub struct FundTransferRequest {
     pub currency: String,
     pub from_payout_destination: String,
     pub to_payout_destination: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reference: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
@@ -23,10 +25,10 @@ pub struct FundTransfer {
     pub to_payout_destination: String,
     pub status: String,
     pub created_at: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reference: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }

@@ -1,5 +1,7 @@
-use serde::{Deserialize, Serialize};
+//! Type definitions for loyalty programs.
+
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Address {

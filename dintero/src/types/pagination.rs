@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -51,10 +53,7 @@ impl PaginationParams {
 
 impl Default for PaginationParams {
     fn default() -> Self {
-        Self {
-            limit: Some(50),
-            starting_after: None,
-        }
+        Self { limit: Some(50), starting_after: None }
     }
 }
 

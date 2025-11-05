@@ -1,3 +1,5 @@
+//! API key management for the Checkout API.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5,10 +7,10 @@ pub struct ApiKey {
     pub id: String,
     pub name: String,
     pub created_at: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_used_at: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<String>,
 }
@@ -16,7 +18,7 @@ pub struct ApiKey {
 #[derive(Debug, Clone, Serialize)]
 pub struct CreateApiKeyRequest {
     pub name: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<String>,
 }
@@ -27,7 +29,7 @@ pub struct CreateApiKeyResponse {
     pub name: String,
     pub key: String,
     pub created_at: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<String>,
 }
@@ -38,7 +40,7 @@ pub struct RotateApiKeyResponse {
     pub name: String,
     pub key: String,
     pub created_at: String,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<String>,
 }

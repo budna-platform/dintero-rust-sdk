@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::client::HttpClient;
 
 #[cfg(feature = "orders")]
@@ -9,9 +11,7 @@ use dintero_orders::{OrdersAdapter, Result as OrdersResult};
 #[async_trait]
 impl OrdersAdapter for HttpClient {
     async fn get_json<T: serde::de::DeserializeOwned>(&self, path: &str) -> OrdersResult<T> {
-        self.get_json(path)
-            .await
-            .map_err(|e| dintero_orders::OrdersError::Client(e.to_string()))
+        self.get_json(path).await.map_err(|e| dintero_orders::OrdersError::Client(e.to_string()))
     }
 
     async fn post_json<T: serde::de::DeserializeOwned, B: serde::Serialize + Send + Sync>(

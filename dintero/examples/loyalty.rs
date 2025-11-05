@@ -33,7 +33,11 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
     match loyalty.customers().create_customer(create_customer_req).await {
         Ok(customer) => {
-            println!("✓ Customer created: {} ({})", customer.id, customer.email.as_deref().unwrap_or("N/A"));
+            println!(
+                "✓ Customer created: {} ({})",
+                customer.id,
+                customer.email.as_deref().unwrap_or("N/A")
+            );
 
             println!("\n2. Creating a virtual card for the customer...");
             let create_card_req = CreateVirtualCardRequest {
@@ -47,8 +51,10 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
             match loyalty.wallets().create_virtual_card(create_card_req).await {
                 Ok(card) => {
-                    println!("✓ Virtual card created: {} (Balance: {} {})", 
-                        card.id, card.balance, card.currency);
+                    println!(
+                        "✓ Virtual card created: {} (Balance: {} {})",
+                        card.id, card.balance, card.currency
+                    );
 
                     println!("\n3. Creating a product catalog...");
                     let catalog_req = CreateProductCatalogRequest {
@@ -77,7 +83,10 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
                             match loyalty.products().create_product_item(product_req).await {
                                 Ok(product) => {
-                                    println!("✓ Product added: {} (SKU: {})", product.name, product.sku);
+                                    println!(
+                                        "✓ Product added: {} (SKU: {})",
+                                        product.name, product.sku
+                                    );
                                 }
                                 Err(e) => println!("✗ Failed to create product: {}", e),
                             }
@@ -99,8 +108,11 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
                     match loyalty.discounts().create_discount_campaign(campaign_req).await {
                         Ok(campaign) => {
-                            println!("✓ Discount campaign created: {} (Code: {})", 
-                                campaign.name, campaign.code.as_deref().unwrap_or("N/A"));
+                            println!(
+                                "✓ Discount campaign created: {} (Code: {})",
+                                campaign.name,
+                                campaign.code.as_deref().unwrap_or("N/A")
+                            );
                         }
                         Err(e) => println!("✗ Failed to create campaign: {}", e),
                     }
@@ -112,25 +124,25 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
                         transaction_id: "TXN-12345".to_string(),
                         amount: 5000,
                         currency: "NOK".to_string(),
-                        items: vec![
-                            CreateReceiptItemRequest {
-                                product_id: None,
-                                name: "Premium Product".to_string(),
-                                quantity: 1,
-                                unit_price: 5000,
-                                total_amount: 5000,
-                                tax_rate: Some(0.25),
-                                discount_amount: None,
-                            },
-                        ],
+                        items: vec![CreateReceiptItemRequest {
+                            product_id: None,
+                            name: "Premium Product".to_string(),
+                            quantity: 1,
+                            unit_price: 5000,
+                            total_amount: 5000,
+                            tax_rate: Some(0.25),
+                            discount_amount: None,
+                        }],
                         payment_method: Some("card".to_string()),
                         metadata: None,
                     };
 
                     match loyalty.receipts().create_receipt(receipt_req).await {
                         Ok(receipt) => {
-                            println!("✓ Receipt created: {} (Amount: {} {})", 
-                                receipt.transaction_id, receipt.amount, receipt.currency);
+                            println!(
+                                "✓ Receipt created: {} (Amount: {} {})",
+                                receipt.transaction_id, receipt.amount, receipt.currency
+                            );
                         }
                         Err(e) => println!("✗ Failed to create receipt: {}", e),
                     }
@@ -177,8 +189,11 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
 
                     match loyalty.webhooks().create_webhook_subscription(webhook_req).await {
                         Ok(subscription) => {
-                            println!("✓ Webhook subscription created: {} events: {}", 
-                                subscription.url, subscription.events.len());
+                            println!(
+                                "✓ Webhook subscription created: {} events: {}",
+                                subscription.url,
+                                subscription.events.len()
+                            );
                         }
                         Err(e) => println!("✗ Failed to create webhook: {}", e),
                     }
@@ -193,15 +208,11 @@ async fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
                             events: vec!["customer_add".to_string()],
                             filter: None,
                         },
-                        limitation: Some(AutomationLimitation {
-                            automation_repeat: Some(1),
-                        }),
-                        actions: vec![
-                            AutomationAction {
-                                action_type: "send_email".to_string(),
-                                params: None,
-                            },
-                        ],
+                        limitation: Some(AutomationLimitation { automation_repeat: Some(1) }),
+                        actions: vec![AutomationAction {
+                            action_type: "send_email".to_string(),
+                            params: None,
+                        }],
                     };
 
                     match loyalty.automations().create_automation_rule(automation_req).await {

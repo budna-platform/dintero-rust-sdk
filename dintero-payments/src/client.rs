@@ -1,3 +1,5 @@
+//! Payments API client implementation.
+
 use crate::fund_transfers::*;
 use crate::payouts::*;
 use crate::sellers::*;
@@ -118,10 +120,7 @@ pub struct PaymentsClient<A: PaymentsAdapter> {
 
 impl<A: PaymentsAdapter> PaymentsClient<A> {
     pub fn new(adapter: A, account_id: String) -> Self {
-        Self {
-            adapter,
-            account_id,
-        }
+        Self { adapter, account_id }
     }
 }
 

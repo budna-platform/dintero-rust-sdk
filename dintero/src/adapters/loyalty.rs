@@ -1,3 +1,5 @@
+//! Loyalty API adapter.
+
 use crate::DinteroClient;
 
 #[cfg(feature = "loyalty")]
@@ -15,9 +17,7 @@ impl LoyaltyAdapter {
             http_client.account_id().to_string(),
         );
 
-        Self {
-            client: loyalty_client,
-        }
+        Self { client: loyalty_client }
     }
 
     pub fn customers(&self) -> &dintero_loyalty::LoyaltyClient {

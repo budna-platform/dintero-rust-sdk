@@ -1,3 +1,10 @@
+//! Copyright (c) 2024 Budna Marketplace AB
+//! Author: Marcus Cvjeticanin
+//!
+//! Dintero Orders API client library.
+//!
+//! This crate provides types and clients for managing orders in the Dintero platform.
+
 pub mod authorizations;
 pub mod cancellations;
 pub mod captures;

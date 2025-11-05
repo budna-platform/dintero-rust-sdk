@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::client::InsightsClient;
 use crate::types::*;
 

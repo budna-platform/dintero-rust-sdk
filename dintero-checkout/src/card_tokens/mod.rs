@@ -1,3 +1,5 @@
+//! Module exports and organization.
+
 pub mod operations;
 pub mod types;
 

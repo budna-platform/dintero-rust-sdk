@@ -1,3 +1,5 @@
+//! Adapters for integrating feature-specific clients.
+
 #[cfg(feature = "checkout")]
 pub mod checkout;
 

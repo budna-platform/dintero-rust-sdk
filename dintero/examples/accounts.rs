@@ -45,7 +45,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
             if let Some(next_token) = account_list.next_page_token {
-                println!("   ℹ More results available (next_page_token: {})", next_token);
+                println!(
+                    "   ℹ More results available (next_page_token: {})",
+                    next_token
+                );
             }
         }
         Err(e) => println!("   ✗ Error: {}", e),
@@ -79,7 +82,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("\n4. Update Account");
     println!("   Updating account information...");
-    
+
     use dintero::accounts::UpdateAccountRequest;
     let update_request = UpdateAccountRequest::new()
         .name("Updated Account Name")
@@ -149,19 +152,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("\n7. Update Profile");
     println!("   Updating profile...");
-    
-    use dintero::accounts::{UpdateProfileRequest, ProfileSettings, CheckoutSettings};
-    
+
+    use dintero::accounts::{CheckoutSettings, ProfileSettings, UpdateProfileRequest};
+
     let checkout_settings = CheckoutSettings {
         terms_url: Some("https://example.com/terms".to_string()),
         privacy_url: Some("https://example.com/privacy".to_string()),
     };
-    
+
     let profile_settings = ProfileSettings {
         branding: None,
         checkout: Some(checkout_settings),
     };
-    
+
     let update_request = UpdateProfileRequest::new()
         .name("Updated Profile")
         .logo_url("https://example.com/logo.png")

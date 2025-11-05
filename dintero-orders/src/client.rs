@@ -1,3 +1,5 @@
+//! Orders API client implementation.
+
 use crate::authorizations::*;
 use crate::cancellations::*;
 use crate::captures::*;
@@ -135,10 +137,7 @@ pub struct OrdersClient<A: OrdersAdapter> {
 
 impl<A: OrdersAdapter> OrdersClient<A> {
     pub fn new(adapter: A, account_id: String) -> Self {
-        Self {
-            adapter,
-            account_id,
-        }
+        Self { adapter, account_id }
     }
 }
 

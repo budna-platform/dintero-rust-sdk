@@ -1,8 +1,10 @@
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
-use uuid::Uuid;
-use crate::error::Result;
+//! Receipt management.
+
 use crate::client::LoyaltyClient;
+use crate::error::Result;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Receipt {
@@ -66,12 +68,8 @@ pub struct ListReceiptsRequest {
 impl LoyaltyClient {
     pub async fn create_receipt(&self, req: CreateReceiptRequest) -> Result<Receipt> {
         let url = self.url("/receipts");
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -84,11 +82,8 @@ impl LoyaltyClient {
 
     pub async fn get_receipt(&self, receipt_id: &Uuid) -> Result<Receipt> {
         let url = self.url(&format!("/receipts/{}", receipt_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -102,7 +97,7 @@ impl LoyaltyClient {
     pub async fn list_receipts(&self, req: ListReceiptsRequest) -> Result<Vec<Receipt>> {
         let mut url = self.url("/receipts");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
@@ -115,17 +110,14 @@ impl LoyaltyClient {
         if let Some(location_id) = req.location_id {
             params.push(format!("location_id={}", location_id));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {

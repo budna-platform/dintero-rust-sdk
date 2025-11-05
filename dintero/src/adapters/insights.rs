@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use crate::DinteroClient;
 
 #[cfg(feature = "insights")]

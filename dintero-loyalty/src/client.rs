@@ -1,3 +1,5 @@
+//! Loyalty API client implementation.
+
 use reqwest::Client;
 
 pub struct LoyaltyClient {
@@ -8,11 +10,7 @@ pub struct LoyaltyClient {
 
 impl LoyaltyClient {
     pub fn new(http: Client, base_url: String, account_id: String) -> Self {
-        Self {
-            http,
-            base_url,
-            account_id,
-        }
+        Self { http, base_url, account_id }
     }
 
     pub(crate) fn url(&self, path: &str) -> String {

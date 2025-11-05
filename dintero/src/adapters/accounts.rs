@@ -1,14 +1,16 @@
+//! Accounts API adapter.
+
 use crate::client::HttpClient;
 
 #[cfg(feature = "accounts")]
 use dintero_accounts::{
-    Account, AccountList, AccountsClient, Profile, ProfileList, Session, UpdateAccountRequest,
-    UpdateProfileRequest,
     account::AccountDetails,
-    locations::{Location, Terminal},
-    users::User,
     clients::OAuthClient,
     gateways::GatewayConnection,
+    locations::{Location, Terminal},
+    users::User,
+    Account, AccountList, AccountsClient, Profile, ProfileList, Session, UpdateAccountRequest,
+    UpdateProfileRequest,
 };
 
 #[cfg(feature = "accounts")]
@@ -19,15 +21,22 @@ pub struct AccountsAdapter {
 #[cfg(feature = "accounts")]
 impl AccountsAdapter {
     pub fn new(client: &HttpClient) -> Self {
-        let accounts_client = AccountsClient::new(client.base_url.clone(), client.api_token.clone());
+        let accounts_client =
+            AccountsClient::new(client.base_url.clone(), client.api_token.clone());
         Self { accounts_client }
     }
 
-    pub async fn get_account(&self, account_id: &str) -> Result<Account, dintero_accounts::AccountError> {
+    pub async fn get_account(
+        &self,
+        account_id: &str,
+    ) -> Result<Account, dintero_accounts::AccountError> {
         self.accounts_client.get_account(account_id).await
     }
 
-    pub async fn list_accounts(&self, page_token: Option<&str>) -> Result<AccountList, dintero_accounts::AccountError> {
+    pub async fn list_accounts(
+        &self,
+        page_token: Option<&str>,
+    ) -> Result<AccountList, dintero_accounts::AccountError> {
         self.accounts_client.list_accounts(page_token).await
     }
 
@@ -61,16 +70,16 @@ impl AccountsAdapter {
         profile_id: &str,
         request: UpdateProfileRequest,
     ) -> Result<Profile, dintero_accounts::AccountError> {
-        self.accounts_client
-            .update_profile(account_id, profile_id, request)
-            .await
+        self.accounts_client.update_profile(account_id, profile_id, request).await
     }
 
     pub async fn get_session(&self) -> Result<Session, dintero_accounts::AccountError> {
         self.accounts_client.get_session().await
     }
 
-    pub async fn get_account_details(&self) -> Result<AccountDetails, dintero_accounts::AccountError> {
+    pub async fn get_account_details(
+        &self,
+    ) -> Result<AccountDetails, dintero_accounts::AccountError> {
         self.accounts_client.get_account_details().await
     }
 
@@ -78,11 +87,17 @@ impl AccountsAdapter {
         self.accounts_client.list_locations().await
     }
 
-    pub async fn get_location(&self, location_id: &str) -> Result<Location, dintero_accounts::AccountError> {
+    pub async fn get_location(
+        &self,
+        location_id: &str,
+    ) -> Result<Location, dintero_accounts::AccountError> {
         self.accounts_client.get_location(location_id).await
     }
 
-    pub async fn list_terminals(&self, location_id: &str) -> Result<Vec<Terminal>, dintero_accounts::AccountError> {
+    pub async fn list_terminals(
+        &self,
+        location_id: &str,
+    ) -> Result<Vec<Terminal>, dintero_accounts::AccountError> {
         self.accounts_client.list_terminals(location_id).await
     }
 
@@ -94,11 +109,15 @@ impl AccountsAdapter {
         self.accounts_client.get_user(user_id).await
     }
 
-    pub async fn list_oauth_clients(&self) -> Result<Vec<OAuthClient>, dintero_accounts::AccountError> {
+    pub async fn list_oauth_clients(
+        &self,
+    ) -> Result<Vec<OAuthClient>, dintero_accounts::AccountError> {
         self.accounts_client.list_oauth_clients().await
     }
 
-    pub async fn list_gateway_connections(&self) -> Result<Vec<GatewayConnection>, dintero_accounts::AccountError> {
+    pub async fn list_gateway_connections(
+        &self,
+    ) -> Result<Vec<GatewayConnection>, dintero_accounts::AccountError> {
         self.accounts_client.list_gateway_connections().await
     }
 }

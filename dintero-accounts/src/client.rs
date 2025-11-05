@@ -1,3 +1,5 @@
+//! Accounts API client implementation.
+
 use crate::error::Result;
 use crate::types::*;
 use reqwest::{Client, Response};
@@ -24,21 +26,13 @@ impl AccountsClient {
             Ok(response.json().await?)
         } else {
             let message = response.text().await.unwrap_or_default();
-            Err(crate::error::AccountError::ApiError {
-                status: status.as_u16(),
-                message,
-            })
+            Err(crate::error::AccountError::ApiError { status: status.as_u16(), message })
         }
     }
 
     pub async fn get_account(&self, account_id: &str) -> Result<Account> {
         let url = format!("{}/v1/accounts/{}", self.base_url, account_id);
-        let response = self
-            .client
-            .get(&url)
-            .bearer_auth(&self.api_token)
-            .send()
-            .await?;
+        let response = self.client.get(&url).bearer_auth(&self.api_token).send().await?;
 
         self.handle_response(response).await
     }
@@ -49,12 +43,7 @@ impl AccountsClient {
             url.push_str(&format!("?page_token={}", token));
         }
 
-        let response = self
-            .client
-            .get(&url)
-            .bearer_auth(&self.api_token)
-            .send()
-            .await?;
+        let response = self.client.get(&url).bearer_auth(&self.api_token).send().await?;
 
         self.handle_response(response).await
     }
@@ -81,12 +70,7 @@ impl AccountsClient {
             "{}/v1/accounts/{}/profiles/{}",
             self.base_url, account_id, profile_id
         );
-        let response = self
-            .client
-            .get(&url)
-            .bearer_auth(&self.api_token)
-            .send()
-            .await?;
+        let response = self.client.get(&url).bearer_auth(&self.api_token).send().await?;
 
         self.handle_response(response).await
     }
@@ -101,12 +85,7 @@ impl AccountsClient {
             url.push_str(&format!("?page_token={}", token));
         }
 
-        let response = self
-            .client
-            .get(&url)
-            .bearer_auth(&self.api_token)
-            .send()
-            .await?;
+        let response = self.client.get(&url).bearer_auth(&self.api_token).send().await?;
 
         self.handle_response(response).await
     }
@@ -134,12 +113,7 @@ impl AccountsClient {
 
     pub async fn get_session(&self) -> Result<Session> {
         let url = format!("{}/v1/accounts/session", self.base_url);
-        let response = self
-            .client
-            .get(&url)
-            .bearer_auth(&self.api_token)
-            .send()
-            .await?;
+        let response = self.client.get(&url).bearer_auth(&self.api_token).send().await?;
 
         self.handle_response(response).await
     }

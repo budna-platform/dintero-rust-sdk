@@ -1,9 +1,11 @@
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
-use uuid::Uuid;
-use crate::types::{Address, PaginatedResponse};
-use crate::error::Result;
+//! Location management.
+
 use crate::client::LoyaltyClient;
+use crate::error::Result;
+use crate::types::{Address, PaginatedResponse};
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Location {
@@ -55,12 +57,8 @@ pub struct ListLocationsRequest {
 impl LoyaltyClient {
     pub async fn create_location(&self, req: CreateLocationRequest) -> Result<Location> {
         let url = self.url("/locations");
-        let response = self.http()
-            .post(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().post(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -73,11 +71,8 @@ impl LoyaltyClient {
 
     pub async fn get_location(&self, location_id: &Uuid) -> Result<Location> {
         let url = self.url(&format!("/locations/{}", location_id));
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -88,14 +83,14 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn update_location(&self, location_id: &Uuid, req: UpdateLocationRequest) -> Result<Location> {
+    pub async fn update_location(
+        &self,
+        location_id: &Uuid,
+        req: UpdateLocationRequest,
+    ) -> Result<Location> {
         let url = self.url(&format!("/locations/{}", location_id));
-        let response = self.http()
-            .put(&url)
-            .json(&req)
-            .send()
-            .await?;
-        
+        let response = self.http().put(&url).json(&req).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {
@@ -108,11 +103,8 @@ impl LoyaltyClient {
 
     pub async fn delete_location(&self, location_id: &Uuid) -> Result<()> {
         let url = self.url(&format!("/locations/{}", location_id));
-        let response = self.http()
-            .delete(&url)
-            .send()
-            .await?;
-        
+        let response = self.http().delete(&url).send().await?;
+
         if response.status().is_success() {
             Ok(())
         } else {
@@ -123,10 +115,13 @@ impl LoyaltyClient {
         }
     }
 
-    pub async fn list_locations(&self, req: ListLocationsRequest) -> Result<PaginatedResponse<Location>> {
+    pub async fn list_locations(
+        &self,
+        req: ListLocationsRequest,
+    ) -> Result<PaginatedResponse<Location>> {
         let mut url = self.url("/locations");
         let mut params = vec![];
-        
+
         if let Some(limit) = req.limit {
             params.push(format!("limit={}", limit));
         }
@@ -136,17 +131,14 @@ impl LoyaltyClient {
         if let Some(active) = req.active {
             params.push(format!("active={}", active));
         }
-        
+
         if !params.is_empty() {
-            url.push_str("?");
+            url.push('?');
             url.push_str(&params.join("&"));
         }
-        
-        let response = self.http()
-            .get(&url)
-            .send()
-            .await?;
-        
+
+        let response = self.http().get(&url).send().await?;
+
         if response.status().is_success() {
             Ok(response.json().await?)
         } else {

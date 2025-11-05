@@ -40,7 +40,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(users) => {
             println!("✓ Found {} user(s)", users.len());
             for user in users {
-                println!("  - {} ({}) - Roles: {}", user.name.unwrap_or_default(), user.email, user.roles.join(", "));
+                println!(
+                    "  - {} ({}) - Roles: {}",
+                    user.name.unwrap_or_default(),
+                    user.email,
+                    user.roles.join(", ")
+                );
             }
         }
         Err(e) => println!("✗ Error: {}", e),
@@ -62,7 +67,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Ok(gateways) => {
             println!("✓ Found {} gateway connection(s)", gateways.len());
             for gateway in gateways {
-                println!("  - {} ({}) - Enabled: {}", gateway.name, gateway.gateway_type, gateway.enabled);
+                println!(
+                    "  - {} ({}) - Enabled: {}",
+                    gateway.name, gateway.gateway_type, gateway.enabled
+                );
             }
         }
         Err(e) => println!("✗ Error: {}", e),

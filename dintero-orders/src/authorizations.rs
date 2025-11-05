@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 

@@ -1,3 +1,5 @@
+//! Module implementation.
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -40,11 +42,7 @@ pub struct CreateRefundRequest {
 
 impl CreateRefundRequest {
     pub fn new(amount: i64) -> Self {
-        Self {
-            amount,
-            reason: None,
-            items: None,
-        }
+        Self { amount, reason: None, items: None }
     }
 
     pub fn with_reason(mut self, reason: impl Into<String>) -> Self {

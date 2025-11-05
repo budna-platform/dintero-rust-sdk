@@ -1,3 +1,5 @@
+//! Type definitions for insights and analytics.
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -127,11 +129,7 @@ pub struct KpiQueryParams {
 
 impl KpiQueryParams {
     pub fn new(from_date: DateTime<Utc>, to_date: DateTime<Utc>) -> Self {
-        Self {
-            from_date,
-            to_date,
-            group_by: None,
-        }
+        Self { from_date, to_date, group_by: None }
     }
 
     pub fn with_group_by(mut self, group_by: String) -> Self {

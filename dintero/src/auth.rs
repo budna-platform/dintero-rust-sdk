@@ -1,23 +1,30 @@
+//! Authentication providers for the Dintero API.
+//!
+//! This module provides different authentication mechanisms including API keys,
+//! OAuth2, and JWT tokens.
+
 use crate::config::AuthConfig;
 use crate::error::{Error, Result};
 use async_trait::async_trait;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
+/// Trait for authentication providers.
 #[async_trait]
 pub trait AuthProvider: Send + Sync {
+    /// Returns the authentication header value for HTTP requests.
     async fn get_auth_header(&self) -> Result<String>;
 }
 
+/// API key authentication provider.
 pub struct ApiKeyAuth {
     api_key: String,
 }
 
 impl ApiKeyAuth {
+    /// Creates a new API key authentication provider.
     pub fn new(api_key: impl Into<String>) -> Self {
-        Self {
-            api_key: api_key.into(),
-        }
+        Self { api_key: api_key.into() }
     }
 }
 
@@ -28,6 +35,7 @@ impl AuthProvider for ApiKeyAuth {
     }
 }
 
+/// OAuth2 authentication provider.
 pub struct OAuthAuth {
     #[allow(dead_code)]
     client_id: String,
@@ -43,6 +51,7 @@ struct OAuthToken {
 }
 
 impl OAuthAuth {
+    /// Creates a new OAuth2 authentication provider.
     pub fn new(client_id: impl Into<String>, client_secret: impl Into<String>) -> Self {
         Self {
             client_id: client_id.into(),
@@ -98,15 +107,15 @@ impl AuthProvider for OAuthAuth {
     }
 }
 
+/// JWT token authentication provider.
 pub struct JwtAuth {
     token: String,
 }
 
 impl JwtAuth {
+    /// Creates a new JWT authentication provider.
     pub fn new(token: impl Into<String>) -> Self {
-        Self {
-            token: token.into(),
-        }
+        Self { token: token.into() }
     }
 }
 
@@ -117,13 +126,13 @@ impl AuthProvider for JwtAuth {
     }
 }
 
+/// Creates an authentication provider from configuration.
 pub fn create_auth_provider(config: &AuthConfig) -> Arc<dyn AuthProvider> {
     match config {
         AuthConfig::ApiKey(key) => Arc::new(ApiKeyAuth::new(key.clone())),
-        AuthConfig::OAuth {
-            client_id,
-            client_secret,
-        } => Arc::new(OAuthAuth::new(client_id.clone(), client_secret.clone())),
+        AuthConfig::OAuth { client_id, client_secret } => {
+            Arc::new(OAuthAuth::new(client_id.clone(), client_secret.clone()))
+        }
         AuthConfig::Jwt(token) => Arc::new(JwtAuth::new(token.clone())),
     }
 }
