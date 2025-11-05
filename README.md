@@ -1,2 +1,3 @@
 # dintero-rust-sdk
-Dintero Rust SDK
+
+The Dintero Rust SDK provides convenient access to the Dintero API from applications written in Rust.
