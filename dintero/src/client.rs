@@ -53,6 +53,14 @@ impl HttpClient {
         &self.account_id
     }
 
+    pub fn base_url(&self) -> &str {
+        &self.base_url
+    }
+
+    pub fn clone_inner(&self) -> Client {
+        self.client.clone()
+    }
+
     fn build_url(&self, path: &str) -> String {
         let path = path.trim_start_matches('/');
         format!("{}/v1/{}", self.base_url, path)

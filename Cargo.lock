@@ -148,6 +148,7 @@ dependencies = [
  "chrono",
  "dintero-accounts",
  "dintero-checkout",
+ "dintero-loyalty",
  "dintero-orders",
  "dintero-payments",
  "reqwest",
@@ -183,6 +184,20 @@ dependencies = [
  "thiserror 2.0.17",
  "tokio",
  "tokio-test",
+ "uuid",
+]
+
+[[package]]
+name = "dintero-loyalty"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "url",
  "uuid",
 ]
 

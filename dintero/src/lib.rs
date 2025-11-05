@@ -25,6 +25,20 @@ pub mod accounts {
     pub use dintero_accounts::*;
 }
 
+#[cfg(feature = "loyalty")]
+pub mod loyalty {
+    pub use dintero_loyalty::*;
+    pub use dintero_loyalty::types::*;
+    pub use dintero_loyalty::customers::*;
+    pub use dintero_loyalty::discounts::*;
+    pub use dintero_loyalty::products::*;
+    pub use dintero_loyalty::receipts::*;
+    pub use dintero_loyalty::wallets::*;
+    pub use dintero_loyalty::webhooks::*;
+    pub use dintero_loyalty::locations::*;
+    pub use dintero_loyalty::automations::*;
+}
+
 pub use client::HttpClient;
 pub use config::{AuthConfig, Config, ConfigBuilder, Environment, RetryConfig};
 pub use error::{Error, Result};
@@ -94,6 +108,15 @@ impl DinteroClient {
     #[cfg(feature = "accounts")]
     pub fn accounts(&self) -> adapters::accounts::AccountsAdapter {
         adapters::accounts::AccountsAdapter::new(&self.http)
+    }
+
+    #[cfg(feature = "loyalty")]
+    pub fn loyalty(&self) -> adapters::loyalty::LoyaltyAdapter {
+        adapters::loyalty::LoyaltyAdapter::new(self)
+    }
+
+    pub(crate) fn http_client(&self) -> &HttpClient {
+        &self.http
     }
 }
 

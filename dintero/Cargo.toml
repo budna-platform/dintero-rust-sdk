@@ -2,7 +2,7 @@
 name = "dintero"
 version = "0.1.0"
 edition = "2021"
-authors = ["Dintero SDK Contributors"]
+authors = ["Marcus Cvjeticanin <mjovanc@icloud.com>"]
 description = "Rust SDK for Dintero APIs"
 license = "MIT"
 repository = "https://github.com/budna-platform/dintero-rust-sdk"
@@ -17,6 +17,7 @@ checkout = ["dep:dintero-checkout"]
 orders = ["dep:dintero-orders"]
 payments = ["dep:dintero-payments"]
 accounts = ["dep:dintero-accounts"]
+loyalty = ["dep:dintero-loyalty"]
 
 [dependencies]
 reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
@@ -36,6 +37,7 @@ dintero-checkout = { version = "0.1.0", path = "../dintero-checkout", optional =
 dintero-orders = { version = "0.1.0", path = "../dintero-orders", optional = true }
 dintero-payments = { version = "0.1.0", path = "../dintero-payments", optional = true }
 dintero-accounts = { version = "0.1.0", path = "../dintero-accounts", optional = true }
+dintero-loyalty = { version = "0.1.0", path = "../dintero-loyalty", optional = true }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }

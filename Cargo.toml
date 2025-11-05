@@ -1,4 +1,4 @@
 [workspace]
-members = ["dintero", "dintero-checkout", "dintero-orders", "dintero-payments", "dintero-accounts"]
+members = ["dintero", "dintero-checkout", "dintero-orders", "dintero-payments", "dintero-accounts", "dintero-loyalty"]
 resolver = "2"
 version = "0.1.0"
