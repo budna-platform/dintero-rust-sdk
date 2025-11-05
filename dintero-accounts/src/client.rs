@@ -143,4 +143,21 @@ impl AccountsClient {
 
         self.handle_response(response).await
     }
+
+    pub(crate) async fn execute_request<T: DeserializeOwned, B: serde::Serialize>(
+        &self,
+        method: reqwest::Method,
+        path: &str,
+        body: Option<&B>,
+    ) -> Result<T> {
+        let url = format!("{}/v1/{}", self.base_url, path);
+        let mut request = self.client.request(method, &url).bearer_auth(&self.api_token);
+
+        if let Some(b) = body {
+            request = request.json(b);
+        }
+
+        let response = request.send().await?;
+        self.handle_response(response).await
+    }
 }
