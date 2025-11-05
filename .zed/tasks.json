@@ -1,0 +1,122 @@
+[
+  {
+    "label": "Dintero: Build",
+    "command": "cargo build",
+    "tags": ["build"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Build Release",
+    "command": "cargo build --release",
+    "tags": ["build"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Run Tests",
+    "command": "cargo test",
+    "tags": ["test"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Run Tests (Verbose)",
+    "command": "cargo test -- --nocapture",
+    "tags": ["test"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Check",
+    "command": "cargo check",
+    "tags": ["check"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Clippy",
+    "command": "cargo clippy --all-targets --all-features",
+    "tags": ["lint"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Format",
+    "command": "cargo fmt",
+    "tags": ["format"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Format Check",
+    "command": "cargo fmt --check",
+    "tags": ["format"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Clean",
+    "command": "cargo clean",
+    "tags": ["clean"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Doc",
+    "command": "cargo doc --no-deps --open",
+    "tags": ["doc"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Update Dependencies",
+    "command": "cargo update",
+    "tags": ["update"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  },
+  {
+    "label": "Dintero: Run All Checks",
+    "command": "cargo fmt --check && cargo clippy --all-targets --all-features && cargo test",
+    "tags": ["ci"],
+    "env": {
+      "DINTERO_ACCOUNT_ID": "T12345678",
+      "DINTERO_API_KEY": "your_api_key_here",
+      "DINTERO_ENVIRONMENT": "test"
+    }
+  }
+]

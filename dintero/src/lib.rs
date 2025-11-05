@@ -4,6 +4,11 @@ pub mod config;
 pub mod error;
 pub mod types;
 
+#[cfg(feature = "checkout")]
+pub mod checkout {
+    pub use dintero_checkout::*;
+}
+
 pub use client::HttpClient;
 pub use config::{AuthConfig, Config, ConfigBuilder, Environment, RetryConfig};
 pub use error::{Error, Result};

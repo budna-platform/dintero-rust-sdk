@@ -13,6 +13,7 @@ categories = ["dintero", "sdk", "payment"]
 
 [features]
 default = []
+checkout = ["dep:dintero-checkout"]
 
 [dependencies]
 reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
@@ -27,6 +28,8 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 async-trait = "0.1"
 bytes = "1.5"
+
+dintero-checkout = { version = "0.1.0", path = "../dintero-checkout", optional = true }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
