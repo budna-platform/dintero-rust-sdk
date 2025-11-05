@@ -2,5 +2,33 @@
 name = "dintero"
 version = "0.1.0"
 edition = "2021"
+authors = ["Dintero SDK Contributors"]
+description = "Rust SDK for Dintero APIs"
+license = "MIT"
+repository = "https://github.com/budna-platform/dintero-rust-sdk"
+documentation = "https://docs.rs/dintero"
+readme = "../README.md"
+keywords = ["dintero", "payments", "checkout", "api", "sdk"]
+categories = ["dintero", "sdk", "payment"]
+
+[features]
+default = []
 
 [dependencies]
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+chrono = { version = "0.4", features = ["serde"] }
+url = "2.5"
+uuid = { version = "1.10", features = ["v4", "serde"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+async-trait = "0.1"
+bytes = "1.5"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-test = "0.4"
+anyhow = "1.0"
