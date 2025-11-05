@@ -6,7 +6,6 @@ authors.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "Checkout API implementation for Dintero SDK"
-publish = false
 
 [dependencies]
 serde.workspace = true

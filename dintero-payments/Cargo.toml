@@ -6,7 +6,6 @@ authors.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "Payments API implementation for Dintero SDK"
-publish = false
 
 [dependencies]
 reqwest.workspace = true
